@@ -20,7 +20,7 @@ class CategoryController:
                 return f"Não existe nenhuma categoria com id {id}."
 
         except:
-            return "Ocorreu um erro ao consultar o banco de dados."
+            return False
 
         try:
             category = session.query(Category).filter(Category.id == id).one()
@@ -38,7 +38,7 @@ class CategoryController:
                 return f"A categoria {name} já existe. Não é possível fazer o cadastro."
 
         except:
-            return "Ocorreu um erro ao consultar o banco de dados."
+            return False
 
         try:
             session.add(Category(nome = name))
@@ -57,14 +57,14 @@ class CategoryController:
                 return f"A categoria com id {id} não existe. Impossível fazer a alteração."
 
         except:
-            return "Ocorreu um erro ao consultar o banco de dados."
+            return False
 
         try:
             if session.query(session.query(Category).filter(Category.nome == new_name).exists()).one()[0]:
                 return f"Já existe uma categoria de nome {new_name} cadastrada. Não é possível fazer a alteração:"
 
         except:
-            return "Ocorreu um erro ao consultar o banco de dados."
+            return False
 
         try:
             session.query(Category).filter(Category.id == id).update({Category.nome: new_name})
@@ -83,7 +83,7 @@ class CategoryController:
                 return f"Não existe nenhuma categoria de id {id} cadastrada. Impossível fazer a remoção."
 
         except:
-            return "Ocorreu um erro ao consultar o banco de dados."
+            return False
 
         try:
             session.query(Category).filter(Category.id == id).delete()
@@ -114,7 +114,7 @@ class ProductController:
                 return f"Não existe nenhum produto de id {id} cadastrado."
 
         except:
-            return "Ocorreu um erro ao consultar o banco de dados."
+            return False
 
         try:
             product = session.query(Product).filter(Product.id == id).one()
@@ -135,7 +135,7 @@ class ProductController:
                 return f"Não existe nenhuma categoria de id {id}. Impossível realizar o cadastro."
 
         except:
-            return "Ocorreu um erro ao consultar o banco de dados."
+            return False
 
         try:
             session.add(Product(nome = name, idcategoria = category_id, vendas = 0))
@@ -154,7 +154,7 @@ class ProductController:
                 return f"Não existe nenhum produto de id {id} cadastrado. Impossível fazer a adição."
 
         except:
-            return "Ocorreu um erro ao consultar o banco de dados."
+            return False
 
         try:
             session.query(Product).filter(Product.id == id).update({Product.vendas: Product.vendas + sales})
@@ -176,7 +176,7 @@ class ProductController:
                 return f"Um produto de nome {new_name} já existe. Impossível fazer a alteração."
 
         except:
-            return "Ocorreu um erro ao consultar o banco de dados."
+            return False
 
         try:
             session.query(Product).filter(Product.id == id).update({Product.nome: new_name})
@@ -198,7 +198,7 @@ class ProductController:
                 return f"Não existe nenhuma categoria cadastrada de id {id}. Impossível fazer a alteração."
 
         except:
-            return "Ocorreu um erro ao consultar o banco de dados."
+            return False
 
         try:
             session.query(Product).filter(Product.id == id).update({Product.idcategoria: new_category_id})
@@ -217,7 +217,7 @@ class ProductController:
                 return f"Não existe nenhum produto de id {id} cadastrado. Impossível fazer a remoção."
 
         except:
-            return "Ocorreu um erro ao consultar o banco de dados."
+            return False
 
         try:
             session.query(Product).filter(Product.id == id).delete()
@@ -248,7 +248,7 @@ class ProviderController:
                 return f"Não existe nenhum fornecedor de id {id} cadastrado."
 
         except:
-            return "Ocorreu um erro ao consultar o banco de dados."
+            return False
 
         try:
             provider = session.query(Provider).filter(Provider.id == id).one()
@@ -269,7 +269,7 @@ class ProviderController:
                 return f"Não existe nenhuma categoria de id {id} cadastrada. Impossível realizar o cadastro."
 
         except:
-            return "Ocorreu um erro ao consultar o banco de dados."
+            return False
 
         try:
             session.add(Provider(nome = name, idcategoria = category_id))
@@ -288,7 +288,7 @@ class ProviderController:
                 return f"Não existe nenhum fornecedor de id {id} cadastrado. Impossível realizar a alteração."
 
         except:
-            return "Ocorreu um erro ao consultar o banco de dados."
+            return False
 
         try:
             session.query(Provider).filter(Provider.id == id).update({Provider.nome: new_name})
@@ -307,7 +307,7 @@ class ProviderController:
                 return f"Não existe nenhum fornecedor de id {id} cadastrado. Impossível fazer a remoção."
 
         except:
-            return "Ocorreu um erro ao consultar o banco de dados."
+            return False
 
         try:
             session.query(Provider).filter(Provider.id == id).delete()
@@ -338,7 +338,7 @@ class CustomerController:
                 return f"Não existe nenhum cliente de nick {nick} cadastrado."
 
         except:
-            return "Ocorreu um erro ao consultar o banco de dados."
+            return False
 
         try:
             customer = session.query(Customer).filter(Customer.nick == nick).one()
@@ -359,7 +359,7 @@ class CustomerController:
                 return "Já existe um cliente cadastrado com o CPF passado. Impossível realizar o cadastro."
 
         except:
-            return "Ocorreu um erro ao consultar o banco de dados."
+            return False
 
         try:
             session.add(Customer(nick = nick, nome = name, cpf = cpf, compras = 0))
@@ -381,7 +381,7 @@ class CustomerController:
                 return f"Já existe um cliente com nick {nick} cadastrado. Impossível alterar."
 
         except:
-            return "Ocorreu um erro ao consultar o banco de dados."
+            return False
 
         try:
             session.query(Customer).filter(Customer.nick == nick).update({Customer.nick: new_nick})
@@ -400,7 +400,7 @@ class CustomerController:
                 return f"O cliente de nick {nick} não existe. Não é possível fazer a remoção."
 
         except:
-            return "Ocorreu um erro ao consultar o banco de dados."
+            return False
 
         try:
             session.query(Customer).filter(Customer.nick == nick).delete()
@@ -431,7 +431,7 @@ class EmployeeController:
                 return f"Não existe nenhum funcionário de nick {nick} cadastrado."
 
         except:
-            return "Ocorreu um erro ao consultar o banco de dados."
+            return False
 
         try:
             employee = session.query(Employee).filter(Employee.nick == nick).one()
@@ -452,7 +452,7 @@ class EmployeeController:
                 return "O CPF digitado já foi cadastrado. Não é possível realizar o cadastro."
 
         except:
-            return "Ocorreu um erro ao consultar o banco de dados."
+            return False
 
         try:
             session.add(Employee(nick = nick, nome = name, cpf = cpf))
@@ -474,7 +474,7 @@ class EmployeeController:
                 return f"Já existe um funcionário com o nick {nick} cadastrado. Impossível realizar a alteração."
 
         except:
-            return "Ocorreu um erro ao consultar o banco de dados."
+            return False
 
         try:
             session.query(Employee).filter(Employee.nick == nick).update({Employee.nick: new_nick})
@@ -493,7 +493,7 @@ class EmployeeController:
                 return f"Não existe nenhum funcionário de nick {nick}. Impossível fazer a remoção."
 
         except:
-            return "Ocorreu um erro ao consultar o banco de dados."
+            return False
 
         try:
             session.query(Employee).filter(Employee.nick == nick).delete()

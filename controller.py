@@ -172,7 +172,7 @@ class ProductController:
             if not session.query(session.query(Product).filter(Product.id == id).exists()).one()[0]:
                 return f"O produto de id {id} não existe. Impossível fazer a alteração."
 
-            if session.query(session.query(Product).filter(Product.nome == name).exists()).one()[0]:
+            if session.query(session.query(Product).filter(Product.nome == new_name).exists()).one()[0]:
                 return f"Um produto de nome {new_name} já existe. Impossível fazer a alteração."
 
         except:

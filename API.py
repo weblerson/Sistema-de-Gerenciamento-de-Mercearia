@@ -217,8 +217,218 @@ def remove_provider(id: int):
 
 #---------------Provider---------------
 
+#---------------Customer---------------
+
+@app.get('/read/customer')
+def read_customer():
+    response = CustomerController.read()
+
+    if type(response) == bool and not response:
+        return {"response": "Ocorreu um erro ao consultar o banco de dados."}
+
+    return {"response": response}
+
+@app.post('/find/customer')
+def find_customer(nick: str):
+    response = CustomerController.find(nick = nick)
+    
+    if type(response) == bool and not response:
+        return {"response": "Ocorreu um erro ao consultar o banco de dados."}
+
+    if type(response) == str:
+        return {"response": response}
+
+    return {"response": {"nick": response.nick, "nome": response.nome, "CPF": response.cpf, "compras": response.compras}}
+
+@app.post('/register/customer')
+def register_customer(nick: str, name: str, cpf: str):
+    response = CustomerController.register(nick = nick, name = name, cpf = cpf)
+
+    if type(response) == bool and not response:
+        return {"response": "Ocorreu um erro ao consultar o banco de dados."}
+
+    if type(response) == str:
+        return {"response": response}
+
+    if type(response) == bool and response:
+        return {"response": "Cliente cadastrado com sucesso."}
+
+@app.post('/change/customer')
+def change_customer(nick: str, new_nick: str):
+    response = CustomerController.change(nick = nick, new_nick = new_nick)
+
+    if type(response) == bool and not response:
+        return {"response": "Ocorreu um erro ao consultar o banco de dados."}
+
+    if type(response) == str:
+        return {"response": response}
+
+    if type(response) == bool and response:
+        return {"response": "Nick do cliente alterado com sucesso."}
+
+@app.post('remove/customer')
+def remove_customer(nick: str):
+    response = CustomerController.remove(nick = nick)
+
+    if type(response) == bool and not response:
+        return {"response": "Ocorreu um erro ao consultar o banco de dados."}
+
+    if type(response) == str:
+        return {"response": response}
+
+    if type(response) == bool and response:
+        return {"response": "Cliente removido com sucesso."}
+
+#---------------Customer---------------
+
+#---------------Employee---------------
+
+@app.get('/read/employee')
+def read_employee():
+    response = EmployeeController.read()
+
+    if type(response) == bool and not response:
+        return {"response": "Ocorreu um erro ao consultar o banco de dados."}
+
+    return {"response": response}
+
+@app.post('/find/employee')
+def find_employee(nick: str):
+    response = EmployeeController.find(nick = nick)
+
+    if type(response) == bool and not response:
+        return {"response": "Ocorreu um erro ao consultar o banco de dados."}
+
+    if type(response) == str:
+        return {"response": response}
+
+    return {"response": {"nick": response.nick, "nome": response.nome, "CPF": response.cpf}}
+
+@app.post('/register/employee')
+def register_employee(nick: str, name: str, cpf: str):
+    response = EmployeeController.register(nick = nick, name = name, cpf = cpf)
+
+    if type(response) == bool and not response:
+        return {"response": "Ocorreu um erro ao consultar o banco de dados."}
+
+    if type(response) == str:
+        return {"response": response}
+
+    if type(response) == bool and response:
+        return {"response": "Funcionário cadastrado com sucesso"}
+
+@app.post('/change/employee')
+def change_employee(nick: str, new_nick: str):
+    response = EmployeeController.change(nick = nick, new_nick = new_nick)
+
+    if type(response) == bool and not response:
+        return {"response": "Ocorreu um erro ao consultar o banco de dados."}
+
+    if type(response) == str:
+        return {"response": response}
+    
+    if type(response) == bool and response:
+        return {"response": "Nick de funcionário alterado com sucesso."}
+
+@app.post('/remove/employees/')
+def remove_employee(nick: str):
+    response = EmployeeController.remove(nick = nick)
+
+    if type(response) == bool and not response:
+        return {"response": "Ocorreu um erro ao consultar o banco de dados."}
+
+    if type(response) == str:
+        return {"response": response}
+
+    if type(response) == bool and response:
+        return {"response": "Funcionário removido com sucesso."}
+
+#---------------Employee---------------
+
+#---------------Info---------------
+
+@app.get('/read')
+def read():
+    return {"response": {"rotas": "/category, /product, /provider, /customer, /employee"}}
+
+@app.get('/find')
+def find():
+    return {"response": {"rotas": "/category (id: int), /product (id: int), /provider (id: int), /customer (nick: str), /employee (nick: str)"}}
+
+@app.get('/register')
+def register():
+    return {"response": {"rotas": "/category (name: str), /product (name: str, category_id: int), /provider (name: str, category_id: int), /customer (nick: str, name: str, cpf: str), /employee (nick: str, name: str, cpf: str)"}}
+
+@app.get('/change')
+def change():
+    return {"response": {"rotas": "/category (id: int, new_name: str), /productname (id: int, name: str), /productcategory (id: int, category_id: int), /provider (id: int, name: str), /customer (nick: str, new_nick: str), /employee (nick: str, new_nick: str)"}}
+
+@app.get('/remove')
+def remove():
+    return {"response": {"rotas": "/category (id: int), /product (id: int), /provider (id: int), /customer (nick: str), /employee (nick: str)"}}
+
+#---------------Info---------------
+
 #---------------Special---------------
 
+@app.post('/sell')
+def sell(product_id: int, customer_nick: str, amount: int):
+    customer_response = CustomerController.buy(nick = customer_nick, amount = amount)
+    product_response = ProductController.sell(id = product_id, amount = amount)
 
+    if type(customer_response) == bool and not customer_response or type(product_response) == bool and not product_response:
+        return {"response": "Ocorreu um erro ao consultar o banco de dados."}
+
+    if type(customer_response) == str:
+        return {"response": customer_response}
+
+    elif type(product_response) == str:
+        return {"response": product_response}
+
+    if (type(customer_response) == bool and customer_response) and (type(product_response) == bool and product_response):
+        return {"response": "Venda realizada com sucesso."}
 
 #---------------Special---------------
+
+#---------------Report---------------
+
+@app.get('/sales')
+def sales():
+    response = ProductController.read()
+
+    if type(response) == bool and not response:
+        return {"response": "Ocorreu um erro ao consultar o banco de dados."}
+
+    sales = []
+
+    for product in response:
+        sales.append({"nome": product.nome, "vendas": product.vendas})
+
+    return {"response": sales}
+
+@app.get('/sales/product')
+def product_sales():
+    response = ProductController.read()
+
+    if type(response) == bool and not response:
+        return {"response": "Ocorreu um erro ao consultar o banco de dados."}
+
+    response.sort(reverse = True, key = lambda x: x.nome)
+
+    sales = []
+
+    for product in response:
+        sales.append({"nome": product.nome, "vendas": product.vendas})
+
+        if len(sales) == 3:
+            break
+
+    return {"response": {
+        "#1": sales[0],
+        "#2": sales[1],
+        "#3": sales[2]
+    }}
+
+    
+
+#---------------Report---------------

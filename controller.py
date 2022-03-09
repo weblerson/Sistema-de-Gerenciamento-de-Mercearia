@@ -148,7 +148,7 @@ class ProductController:
             return False
 
     @classmethod
-    def add(cls, id, sales):
+    def sell(cls, id, amount):
         try:
             if not session.query(session.query(Product).filter(Product.id == id).exists()).one()[0]:
                 return f"Não existe nenhum produto de id {id} cadastrado. Impossível fazer a adição."
@@ -157,7 +157,7 @@ class ProductController:
             return False
 
         try:
-            session.query(Product).filter(Product.id == id).update({Product.vendas: Product.vendas + sales})
+            session.query(Product).filter(Product.id == id).update({Product.vendas: Product.vendas + amount})
             session.commit()
 
             return True
@@ -361,7 +361,12 @@ class CustomerController:
         except:
             return False
 
+        cpf = cpf.replace('-', '')
+
         try:
+            if len(cpf) < 11 or len(cpf) > 11:
+                return "CPF passado inválido. Digite um CPF de 11 dígitos."
+
             session.add(Customer(nick = nick, nome = name, cpf = cpf, compras = 0))
             session.commit()
 
@@ -412,6 +417,25 @@ class CustomerController:
 
             return False
 
+    @classmethod
+    def buy(nick, amount):
+        try:
+            if not session.query(session.query(Customer).filter(Customer.nick == nick).exists()).one()[0]:
+                return f"O cliente de nick {nick} não existe. Não é possível fazer a operação de venda."
+            
+        except:
+            return False
+
+        try:
+            session.query(Customer).filter(Customer.nick == nick).update({Customer.compras: Customer.compras + amount})
+            session.commit()
+
+            return True
+
+        except:
+
+            return False
+
 class EmployeeController:
     @classmethod
     def read(cls):
@@ -454,7 +478,12 @@ class EmployeeController:
         except:
             return False
 
+        cpf = cpf.replace('-', '')
+
         try:
+            if len(cpf) < 11 or len(cpf) > 11:
+                return "CPF passado inválido. Digite um CPF de 11 dígitos."
+
             session.add(Employee(nick = nick, nome = name, cpf = cpf))
             session.commit()
 

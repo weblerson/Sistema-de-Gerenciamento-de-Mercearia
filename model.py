@@ -1,4 +1,5 @@
 from config import *
+import datetime
 
 class Category(Base):
     __tablename__ = "categoria"
@@ -30,5 +31,10 @@ class Employee(Base):
     nick = Column(String(20), primary_key = True, nullable = False)
     nome = Column(String(60), nullable = False, default = "sem nome")
     cpf = Column(String(11), nullable = False, default = "sem cpf")
+
+class Sales(Base):
+    __tablename__ = "vendas"
+    data = Column(String(10), primary_key = True)
+    vendas = Column(Integer)
 
 Base.metadata.create_all(engine)

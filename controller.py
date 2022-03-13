@@ -1,5 +1,6 @@
 from config import *
 from model import *
+import datetime
 
 class CategoryController:
     @classmethod
@@ -418,7 +419,7 @@ class CustomerController:
             return False
 
     @classmethod
-    def buy(nick, amount):
+    def buy(cls, nick, amount):
         try:
             if not session.query(session.query(Customer).filter(Customer.nick == nick).exists()).one()[0]:
                 return f"O cliente de nick {nick} não existe. Não é possível fazer a operação de venda."
@@ -533,3 +534,38 @@ class EmployeeController:
         except:
 
             return False
+
+class SalesController:
+    @classmethod
+    def read(cls):
+        try:
+            sales_list = session.query(Sales).all()
+
+            return sales_list
+
+        except:
+            return False
+
+    @classmethod
+    def add(cls, amount):
+        today = lambda: str(datetime.date.today()).replace('-', '/')
+
+        if not session.query(session.query(Sales).filter(Sales.data == today()).exists()).one()[0]:
+            try:
+                session.add(Sales(data = today(), vendas = amount))
+                session.commit()
+
+                return True
+
+            except:
+                return False
+
+        else:
+            try:
+                session.query(Sales).filter(Sales.data == today()).update({Sales.vendas: Sales.vendas + amount})
+                session.commit()
+
+                return True
+
+            except:
+                return False

@@ -82,7 +82,7 @@ def read_product():
     if len(response) == 0:
         return {"response": "Não há nenhum produto cadastrado."}
 
-    return response
+    return {"response": response}
 
 @app.post('/find/product')
 def find_product(id: int):
@@ -345,6 +345,19 @@ def remove_employee(nick: str):
 
 #---------------Employee---------------
 
+#---------------Sales---------------
+
+@app.get('/sales')
+def read_sales():
+    response = SalesController.read()
+
+    if type(response) == bool and not response:
+        return {"response": "Ocorreu um erro ao consultar o bando de dados."}
+
+    return {"response": response}
+
+#---------------Sales---------------
+
 #---------------Info---------------
 
 @app.get('/read')
@@ -371,28 +384,45 @@ def remove():
 
 #---------------Special---------------
 
+@app.get('/sell')
+def info_sell():
+    return {"response": {"rotas": "/sell (product_id: int, customer_nick: str, amount: int)"}}
+
 @app.post('/sell')
 def sell(product_id: int, customer_nick: str, amount: int):
     customer_response = CustomerController.buy(nick = customer_nick, amount = amount)
     product_response = ProductController.sell(id = product_id, amount = amount)
+    sales_response = SalesController.add(amount = amount)
 
-    if type(customer_response) == bool and not customer_response or type(product_response) == bool and not product_response:
-        return {"response": "Ocorreu um erro ao consultar o banco de dados."}
+    if type(customer_response) == bool and not customer_response:
+        return {"response": "Ocorreu um erro ao consultar o banco de dados do cliente."}
+
+    elif type(product_response) == bool and not product_response:
+        return {"response": "Ocorreu um erro ao consultar o banco de dados do produto."}
+
+    elif type(sales_response) == bool and not sales_response:
+        return {"response": "Ocorreu um erro ao consultar o banco de dados de vendas."}
+
 
     if type(customer_response) == str:
         return {"response": customer_response}
 
     elif type(product_response) == str:
         return {"response": product_response}
+    
 
-    if (type(customer_response) == bool and customer_response) and (type(product_response) == bool and product_response):
+    if (type(customer_response) == bool and customer_response) and (type(product_response) == bool and product_response) and (type(sales_response) == bool and sales_response):
         return {"response": "Venda realizada com sucesso."}
 
 #---------------Special---------------
 
 #---------------Report---------------
 
-@app.get('/sales')
+@app.get('/report')
+def report():
+    return {"response": {"rotas": "/report/sales, /report/sales/product, /report/purchases, /report/purchases/customer"}}
+
+@app.get('/report/sales')
 def sales():
     response = ProductController.read()
 
@@ -406,14 +436,14 @@ def sales():
 
     return {"response": sales}
 
-@app.get('/sales/product')
+@app.get('/report/sales/product')
 def product_sales():
     response = ProductController.read()
 
     if type(response) == bool and not response:
         return {"response": "Ocorreu um erro ao consultar o banco de dados."}
 
-    response.sort(reverse = True, key = lambda x: x.nome)
+    response.sort(reverse = True, key = lambda x: x.vendas)
 
     sales = []
 
@@ -429,6 +459,41 @@ def product_sales():
         "#3": sales[2]
     }}
 
-    
+@app.get('/report/purchases')
+def purchases():
+    response = CustomerController.read()
+
+    if type(response) == bool and not response:
+        return {"response": "Ocorreu um erro ao consultar o banco de dados."}
+
+    purchases = []
+
+    for customer in response:
+        purchases.append({"nick": customer.nick, "compras": customer.compras})
+
+    return {"response": purchases}
+
+@app.get('/report/purchases/customer')
+def customer_purchases():
+    response = CustomerController.read()
+
+    if type(response) == bool and not response:
+        return {"response": "Ocorreu um erro ao consultar o banco de dados."}
+
+    response.sort(reverse = True, key = lambda x: x.compras)
+
+    purchases = []
+
+    for customer in response:
+        purchases.append({"nick": customer.nick, "compras": customer.compras})
+
+        if len(purchases) == 3:
+            break
+
+    return {"response": {
+        "#1": purchases[0],
+        "#2": purchases[1],
+        "#3": purchases[2]
+    }}
 
 #---------------Report---------------

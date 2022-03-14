@@ -34,11 +34,11 @@ Essas rotas servem para mostrar todas as rotas disponíveis
 
 ![image](https://user-images.githubusercontent.com/96087094/158070155-6cc526aa-71ca-4fe8-b32e-a91c278f4aa8.png)
 
-```Alteração:``` /change ```Método GET```   Vai retornar todas as rotas e parâmetros disponíveis para alterações
+```Alteração:``` /change ```Método: GET```   Vai retornar todas as rotas e parâmetros disponíveis para alterações
 
 ![image](https://user-images.githubusercontent.com/96087094/158070193-12505544-96f8-47da-af37-0a49e33ba002.png)
 
-```Remoção:``` /remove ```Método GET```   Vai retornar todas as rotas e parâmetros disponíveis para remoções
+```Remoção:``` /remove ```Método: GET```   Vai retornar todas as rotas e parâmetros disponíveis para remoções
 
 ![image](https://user-images.githubusercontent.com/96087094/158070236-abfcdd65-17ba-4db9-9a0b-00e5a1deac3c.png)
 
@@ -46,4 +46,10 @@ Essas rotas servem para mostrar todas as rotas disponíveis
 
 ```Leitura:``` /read/category ```Método: GET```   Vai retornar uma lista com as categorias cadastradas
 
-```Filtro:``` /find/category ```Método> POST; Parâmetro: ```   Vai retornar uma categoria com base no filtro que o usuário passar. A categoria vai ser filtrada pelo respectivo ID
+```Filtro:``` /find/category ```Método: POST; Parâmetro: id: int```   Vai retornar uma categoria com base no filtro que o usuário passar. A categoria vai ser filtrada pelo respectivo id
+
+```Cadastro:``` /register/category ```Método: POST, Parâmetro: name: str``` Vai realizar o cadastro de uma nova categoria com o nome passado
+
+```Alteração:``` /change/category ```Método: POST; Parâmetros: id: int, name: str``` Vai alterar o nome da categoria com o respectivo id passado para o nome digitado
+
+```Remoção:``` /remove/category ```Método: POST; Parâmetro: id: int``` Vai remover a categoria com o respectivo id passado

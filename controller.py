@@ -15,16 +15,16 @@ class CategoryController:
             return False
 
     @classmethod
-    def find(cls, id):
+    def find(cls, _id):
         try:
-            if not session.query(session.query(Category).filter(Category.id == id).exists()).one()[0]:
-                return f"Não existe nenhuma categoria com id {id}."
+            if not session.query(session.query(Category).filter(Category.id == _id).exists()).one()[0]:
+                return f"Não existe nenhuma categoria com id {_id}."
 
         except:
             return False
 
         try:
-            category = session.query(Category).filter(Category.id == id).one()
+            category = session.query(Category).filter(Category.id == _id).one()
 
             return category
 
@@ -52,10 +52,10 @@ class CategoryController:
             return False
 
     @classmethod
-    def change(cls, id, new_name):
+    def change(cls, _id, new_name):
         try:
-            if not session.query(session.query(Category).filter(Category.id == id).exists()).one()[0]:
-                return f"A categoria com id {id} não existe. Impossível fazer a alteração."
+            if not session.query(session.query(Category).filter(Category.id == _id).exists()).one()[0]:
+                return f"A categoria com id {_id} não existe. Impossível fazer a alteração."
 
         except:
             return False
@@ -68,7 +68,7 @@ class CategoryController:
             return False
 
         try:
-            session.query(Category).filter(Category.id == id).update({Category.nome: new_name})
+            session.query(Category).filter(Category.id == _id).update({Category.nome: new_name})
             session.commit()
 
             return True
@@ -78,16 +78,16 @@ class CategoryController:
             return False
 
     @classmethod
-    def remove(cls, id):
+    def remove(cls, _id):
         try:
-            if not session.query(session.query(Category).filter(Category.id == id).exists()).one()[0]:
-                return f"Não existe nenhuma categoria de id {id} cadastrada. Impossível fazer a remoção."
+            if not session.query(session.query(Category).filter(Category.id == _id).exists()).one()[0]:
+                return f"Não existe nenhuma categoria de id {_id} cadastrada. Impossível fazer a remoção."
 
         except:
             return False
 
         try:
-            session.query(Category).filter(Category.id == id).delete()
+            session.query(Category).filter(Category.id == _id).delete()
             session.commit()
 
             return True
@@ -109,16 +109,16 @@ class ProductController:
             return False
 
     @classmethod
-    def find(cls, id):
+    def find(cls, _id):
         try:
-            if not session.query(session.query(Product).filter(Product.id == id).exists()).one()[0]:
-                return f"Não existe nenhum produto de id {id} cadastrado."
+            if not session.query(session.query(Product).filter(Product.id == _id).exists()).one()[0]:
+                return f"Não existe nenhum produto de id {_id} cadastrado."
 
         except:
             return False
 
         try:
-            product = session.query(Product).filter(Product.id == id).one()
+            product = session.query(Product).filter(Product.id == _id).one()
 
             return product
 
@@ -133,7 +133,7 @@ class ProductController:
                 return f"Um produto de nome {name} já existe. Não é possível realizar o cadastro."
 
             if not session.query(session.query(Category).filter(Category.id == category_id).exists()).one()[0]:
-                return f"Não existe nenhuma categoria de id {id}. Impossível realizar o cadastro."
+                return f"Não existe nenhuma categoria de id {_id}. Impossível realizar o cadastro."
 
         except:
             return False
@@ -149,16 +149,16 @@ class ProductController:
             return False
 
     @classmethod
-    def sell(cls, id, amount):
+    def sell(cls, _id, amount):
         try:
-            if not session.query(session.query(Product).filter(Product.id == id).exists()).one()[0]:
-                return f"Não existe nenhum produto de id {id} cadastrado. Impossível fazer a adição."
+            if not session.query(session.query(Product).filter(Product.id == _id).exists()).one()[0]:
+                return f"Não existe nenhum produto de id {_id} cadastrado. Impossível fazer a adição."
 
         except:
             return False
 
         try:
-            session.query(Product).filter(Product.id == id).update({Product.vendas: Product.vendas + amount})
+            session.query(Product).filter(Product.id == _id).update({Product.vendas: Product.vendas + amount})
             session.commit()
 
             return True
@@ -168,10 +168,10 @@ class ProductController:
             return False
 
     @classmethod
-    def change_name(cls, id, new_name):
+    def change_name(cls, _id, new_name):
         try:
-            if not session.query(session.query(Product).filter(Product.id == id).exists()).one()[0]:
-                return f"O produto de id {id} não existe. Impossível fazer a alteração."
+            if not session.query(session.query(Product).filter(Product.id == _id).exists()).one()[0]:
+                return f"O produto de id {_id} não existe. Impossível fazer a alteração."
 
             if session.query(session.query(Product).filter(Product.nome == new_name).exists()).one()[0]:
                 return f"Um produto de nome {new_name} já existe. Impossível fazer a alteração."
@@ -180,7 +180,7 @@ class ProductController:
             return False
 
         try:
-            session.query(Product).filter(Product.id == id).update({Product.nome: new_name})
+            session.query(Product).filter(Product.id == _id).update({Product.nome: new_name})
             session.commit()
 
             return True
@@ -190,19 +190,19 @@ class ProductController:
             return False
 
     @classmethod
-    def change_category(cls, id, new_category_id):
+    def change_category(cls, _id, new_category_id):
         try:
-            if not session.query(session.query(Product).filter(Product.id == id).exists()).one()[0]:
-                return f"Não existe nenhum produto de id {id} cadastrado. Impossível fazer a alteração."
+            if not session.query(session.query(Product).filter(Product.id == _id).exists()).one()[0]:
+                return f"Não existe nenhum produto de id {_id} cadastrado. Impossível fazer a alteração."
 
             if not session.query(session.query(Category).filter(Category.id == new_category_id).exists()).one()[0]:
-                return f"Não existe nenhuma categoria cadastrada de id {id}. Impossível fazer a alteração."
+                return f"Não existe nenhuma categoria cadastrada de id {_id}. Impossível fazer a alteração."
 
         except:
             return False
 
         try:
-            session.query(Product).filter(Product.id == id).update({Product.idcategoria: new_category_id})
+            session.query(Product).filter(Product.id == _id).update({Product.idcategoria: new_category_id})
             session.commit()
 
             return True
@@ -212,16 +212,16 @@ class ProductController:
             return False
 
     @classmethod
-    def remove(cls, id):
+    def remove(cls, _id):
         try:
-            if not session.query(session.query(Product).filter(Product.id == id).exists()).one()[0]:
-                return f"Não existe nenhum produto de id {id} cadastrado. Impossível fazer a remoção."
+            if not session.query(session.query(Product).filter(Product.id == _id).exists()).one()[0]:
+                return f"Não existe nenhum produto de id {_id} cadastrado. Impossível fazer a remoção."
 
         except:
             return False
 
         try:
-            session.query(Product).filter(Product.id == id).delete()
+            session.query(Product).filter(Product.id == _id).delete()
             session.commit()
 
             return True
@@ -243,16 +243,16 @@ class ProviderController:
             return False
 
     @classmethod
-    def find(cls, id):
+    def find(cls, _id):
         try:
-            if not session.query(session.query(Provider).filter(Provider.id == id).exists()).one()[0]:
-                return f"Não existe nenhum fornecedor de id {id} cadastrado."
+            if not session.query(session.query(Provider).filter(Provider.id == _id).exists()).one()[0]:
+                return f"Não existe nenhum fornecedor de id {_id} cadastrado."
 
         except:
             return False
 
         try:
-            provider = session.query(Provider).filter(Provider.id == id).one()
+            provider = session.query(Provider).filter(Provider.id == _id).one()
 
             return provider
 
@@ -267,7 +267,7 @@ class ProviderController:
                 return f"Já existe um fornecedor de nome {name} cadastrado. Impossível realizar o cadastro."
 
             if not session.query(session.query(Category).filter(Category.id == category_id).exists()).one()[0]:
-                return f"Não existe nenhuma categoria de id {id} cadastrada. Impossível realizar o cadastro."
+                return f"Não existe nenhuma categoria de id {_id} cadastrada. Impossível realizar o cadastro."
 
         except:
             return False
@@ -283,16 +283,16 @@ class ProviderController:
             return False
 
     @classmethod
-    def change(cls, id, new_name):
+    def change(cls, _id, new_name):
         try:
-            if not session.query(session.query(Provider).filter(Provider.id == id).exists()).one()[0]:
-                return f"Não existe nenhum fornecedor de id {id} cadastrado. Impossível realizar a alteração."
+            if not session.query(session.query(Provider).filter(Provider.id == _id).exists()).one()[0]:
+                return f"Não existe nenhum fornecedor de id {_id} cadastrado. Impossível realizar a alteração."
 
         except:
             return False
 
         try:
-            session.query(Provider).filter(Provider.id == id).update({Provider.nome: new_name})
+            session.query(Provider).filter(Provider.id == _id).update({Provider.nome: new_name})
             session.commit()
 
             return True
@@ -302,16 +302,16 @@ class ProviderController:
             return False
 
     @classmethod
-    def remove(cls, id):
+    def remove(cls, _id):
         try:
-            if not session.query(session.query(Provider).filter(Provider.id == id).exists()).one()[0]:
-                return f"Não existe nenhum fornecedor de id {id} cadastrado. Impossível fazer a remoção."
+            if not session.query(session.query(Provider).filter(Provider.id == _id).exists()).one()[0]:
+                return f"Não existe nenhum fornecedor de id {_id} cadastrado. Impossível fazer a remoção."
 
         except:
             return False
 
         try:
-            session.query(Provider).filter(Provider.id == id).delete()
+            session.query(Provider).filter(Provider.id == _id).delete()
             session.commit()
 
             return True

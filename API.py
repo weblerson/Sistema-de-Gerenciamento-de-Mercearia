@@ -18,8 +18,8 @@ def read_category():
     return response
 
 @app.post('/find/category')
-def find_category(id: int):
-    response = CategoryController.find(id = id)
+def find_category(_id: int):
+    response = CategoryController.find(_id = _id)
 
     if not response:
         return {"response": "Ocorreu um erro ao consultar o banco de dados."}
@@ -43,8 +43,8 @@ def register_category(name: str):
         return {"response": "Categoria cadastrada com sucesso."}
 
 @app.post('/change/category')
-def change_category(id, name):
-    response = CategoryController.change(id = id, new_name = name)
+def change_category(_id, name):
+    response = CategoryController.change(_id = _id, new_name = name)
 
     if type(response) == bool and not response:
         return {"response": "Ocorreu um erro ao consultar o banco de dados."}
@@ -56,8 +56,8 @@ def change_category(id, name):
         return {"response": "Categoria alterada com sucesso."}
 
 @app.post('/remove/category')
-def remove_category(id):
-    response = CategoryController.remove(id = id)
+def remove_category(_id):
+    response = CategoryController.remove(_id = _id)
 
     if type(response) == bool and not response:
         return {"response": "Ocorreu um erro ao consultar o banco de dados"}
@@ -85,8 +85,8 @@ def read_product():
     return {"response": response}
 
 @app.post('/find/product')
-def find_product(id: int):
-    response = ProductController.find(id)
+def find_product(_id: int):
+    response = ProductController.find(_id)
 
     if type(response) == bool and not response:
         return {"response": "Ocorreu um erro ao consultar o banco de dados."}
@@ -110,8 +110,8 @@ def register_product(name: str, category_id: int):
         return {"response": "Produto cadastrado com sucesso"}
 
 @app.post('/change/productname')
-def change_product_name(id: int, name: str):
-    response = ProductController.change_name(id = id, new_name = name)
+def change_product_name(_id: int, new_name: str):
+    response = ProductController.change_name(_id = _id, new_name = new_name)
 
     if type(response) == bool and not response:
         return {"response": "Ocorreu um erro ao consultar o banco de dados."}
@@ -123,8 +123,8 @@ def change_product_name(id: int, name: str):
         return {"response": "Nome do produto alterado com sucesso."}
 
 @app.post('/change/productcategory')
-def change_product_category(id: int, category_id: int):
-    response = ProductController.change_category(id = id, new_category_id = category_id)
+def change_product_category(_id: int, new_category_id: int):
+    response = ProductController.change_category(_id = _id, new_category_id = category_id)
 
     if type(response) == bool and not response:
         return {"response": "Ocorreu um erro ao consultar o banco de dados."}
@@ -136,8 +136,8 @@ def change_product_category(id: int, category_id: int):
         return {"response": "Categoria do produto alterada com sucesso."}
 
 @app.post('/remove/product')
-def remove_product(id: int):
-    response = ProductController.remove(id = id)
+def remove_product(_id: int):
+    response = ProductController.remove(_id = _id)
 
     if type(response) == bool and not response:
         return {"response": "Ocorreu um erro ao consultar o banco de dados."}
@@ -165,8 +165,8 @@ def read_provider():
     return response
 
 @app.post('/find/provider')
-def find_provider(id: int):
-    response = ProviderController.find(id = id)
+def find_provider(_id: int):
+    response = ProviderController.find(_id = _id)
 
     if type(response) == bool and not response:
         return {"response": "Ocorreu um erro ao consultar o banco de dados."}
@@ -190,8 +190,8 @@ def register_provider(name: str, category_id: int):
         return {"response": "Fornecedor cadastrado com sucesso."}
 
 @app.post('/change/provider')
-def change_provider(id: int, name: str):
-    response = ProviderController.change(id = id, new_name = name)
+def change_provider(_id: int, name: str):
+    response = ProviderController.change(_id = _id, new_name = name)
 
     if type(response) == bool and not response:
         return {"response": "Ocorreu um erro ao consultar o banco de dados."}
@@ -203,8 +203,8 @@ def change_provider(id: int, name: str):
         return {"response": "Fornecedor alterado com sucesso."}
 
 @app.post('/remove/provider')
-def remove_provider(id: int):
-    response = ProviderController.remove(id = id)
+def remove_provider(_id: int):
+    response = ProviderController.remove(_id = _id)
 
     if type(response) == bool and not response:
         return {"response": "Ocorreu um erro ao consultar o banco de dados."}
@@ -354,6 +354,9 @@ def read_sales():
     if type(response) == bool and not response:
         return {"response": "Ocorreu um erro ao consultar o bando de dados."}
 
+    if len(response) == 0:
+        return {"response": "Não há nenhuma venda registrada."}
+
     return {"response": response}
 
 #---------------Sales---------------
@@ -366,7 +369,7 @@ def read():
 
 @app.get('/find')
 def find():
-    return {"response": {"rotas": "/category (id: int), /product (id: int), /provider (id: int), /customer (nick: str), /employee (nick: str)"}}
+    return {"response": {"rotas": "/category (_id: int), /product (_id: int), /provider (_id: int), /customer (nick: str), /employee (nick: str)"}}
 
 @app.get('/register')
 def register():
@@ -374,24 +377,28 @@ def register():
 
 @app.get('/change')
 def change():
-    return {"response": {"rotas": "/category (id: int, new_name: str), /productname (id: int, name: str), /productcategory (id: int, category_id: int), /provider (id: int, name: str), /customer (nick: str, new_nick: str), /employee (nick: str, new_nick: str)"}}
+    return {"response": {"rotas": "/category (_id: int, new_name: str), /productname (_id: int, new_name: str), /productcategory (_id: int, new_category_id: int), /provider (_id: int, name: str), /customer (nick: str, new_nick: str), /employee (nick: str, new_nick: str)"}}
 
 @app.get('/remove')
 def remove():
-    return {"response": {"rotas": "/category (id: int), /product (id: int), /provider (id: int), /customer (nick: str), /employee (nick: str)"}}
-
-#---------------Info---------------
-
-#---------------Special---------------
+    return {"response": {"rotas": "/category (_id: int), /product (_id: int), /provider (_id: int), /customer (nick: str), /employee (nick: str)"}}
 
 @app.get('/sell')
 def info_sell():
     return {"response": {"rotas": "/sell (product_id: int, customer_nick: str, amount: int)"}}
 
+@app.get('/report')
+def report():
+    return {"response": {"rotas": "/report/sales, /report/sales/ranking, /report/purchases, /report/purchases/ranking"}}
+
+#---------------Info---------------
+
+#---------------Special---------------
+
 @app.post('/sell')
 def sell(product_id: int, customer_nick: str, amount: int):
     customer_response = CustomerController.buy(nick = customer_nick, amount = amount)
-    product_response = ProductController.sell(id = product_id, amount = amount)
+    product_response = ProductController.sell(_id = product_id, amount = amount)
     sales_response = SalesController.add(amount = amount)
 
     if type(customer_response) == bool and not customer_response:
@@ -418,10 +425,6 @@ def sell(product_id: int, customer_nick: str, amount: int):
 
 #---------------Report---------------
 
-@app.get('/report')
-def report():
-    return {"response": {"rotas": "/report/sales, /report/sales/product, /report/purchases, /report/purchases/customer"}}
-
 @app.get('/report/sales')
 def sales():
     response = ProductController.read()
@@ -436,7 +439,7 @@ def sales():
 
     return {"response": sales}
 
-@app.get('/report/sales/product')
+@app.get('/report/sales/ranking')
 def product_sales():
     response = ProductController.read()
 
@@ -473,7 +476,7 @@ def purchases():
 
     return {"response": purchases}
 
-@app.get('/report/purchases/customer')
+@app.get('/report/purchases/ranking')
 def customer_purchases():
     response = CustomerController.read()
 
